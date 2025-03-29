@@ -3,7 +3,6 @@ package idespring.lab5.repository.studentrepo;
 import idespring.lab5.model.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import java.util.List;
 
 public class StudentRepositoryCustomImpl implements StudentRepositoryCustom {

@@ -5,13 +5,13 @@ import idespring.lab5.service.studservice.StudentServ;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Validated
 @RestController
@@ -22,6 +22,15 @@ public class StudentController {
     @Autowired
     public StudentController(StudentServ studentService) {
         this.studentService = studentService;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Student>> createStudentsBulk(@RequestBody List<Student> students) {
+        List<Student> createdStudents = students.stream()
+                .map(studentService::addStudent)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudents);
     }
 
     @PostMapping

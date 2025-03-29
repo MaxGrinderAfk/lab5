@@ -8,17 +8,16 @@ import idespring.lab5.repository.grouprepo.GroupRepository;
 import idespring.lab5.repository.studentrepo.StudentRepository;
 import idespring.lab5.service.studservice.StudentServiceImpl;
 import jakarta.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -31,7 +30,7 @@ public class GroupServiceImpl implements GroupService {
     private static final String GROUP_NAME_PREFIX = "name_";
     private static final String ALL_GROUPS_PREFIX = "allGroups";
 
-    private final Set<String> groupCacheKeys = ConcurrentHashMap.newKeySet();
+    public final Set<String> groupCacheKeys = ConcurrentHashMap.newKeySet();
     private final StudentServiceImpl studentServiceImpl;
 
     @Autowired
@@ -247,7 +246,7 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.deleteByName(name);
     }
 
-    private void invalidateGroupListCaches() {
+    public void invalidateGroupListCaches() {
         logger.debug("Invalidating all group list caches");
 
         Set<String> keysToRemove = new HashSet<>();

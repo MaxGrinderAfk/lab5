@@ -1,7 +1,6 @@
 package idespring.lab5.service.subjectservice;
 
 import idespring.lab5.model.Subject;
-
 import java.util.List;
 
 public interface SubjectService {

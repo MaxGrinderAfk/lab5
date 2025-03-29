@@ -6,15 +6,14 @@ import idespring.lab5.model.Mark;
 import idespring.lab5.model.Subject;
 import idespring.lab5.repository.markrepo.MarkRepository;
 import idespring.lab5.repository.subjectrepo.SubjectRepository;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {

@@ -5,14 +5,14 @@ import idespring.lab5.model.Subject;
 import idespring.lab5.service.studentsubjserv.StudentSubjectService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Validated
 @RestController
@@ -23,6 +23,17 @@ public class StudentSubjectController {
     @Autowired
     public StudentSubjectController(StudentSubjectService studentSubjectService) {
         this.studentSubjectService = studentSubjectService;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<Void> addSubjectsToStudentBulk(
+            @RequestParam @NotNull @Positive Long studentId,
+            @RequestBody @NotNull List<@Positive Long> subjectIds) {
+        subjectIds.stream()
+                .distinct()
+                .forEach(subjectId ->
+                        studentSubjectService.addSubjectToStudent(studentId, subjectId));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping

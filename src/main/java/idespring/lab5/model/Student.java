@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class Student {
     @ManyToMany(cascade = {CascadeType.DETACH,
             CascadeType.REFRESH, CascadeType.MERGE,
             CascadeType.PERSIST},
-             fetch = FetchType.LAZY)
+             fetch = FetchType.EAGER)
     @JoinTable (
             name = "student_subject",
             joinColumns = @JoinColumn(name = "studentid"),
@@ -104,5 +103,9 @@ public class Student {
     public void addMark(Mark mark) {
         mark.setStudent(this);
         this.marks.add(mark);
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

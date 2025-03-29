@@ -1,7 +1,6 @@
 package idespring.lab5.service.groupservice;
 
 import idespring.lab5.model.Group;
-
 import java.util.List;
 
 public interface GroupService {

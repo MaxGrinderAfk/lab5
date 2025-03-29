@@ -6,14 +6,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Validated
 @RestController
@@ -24,6 +25,16 @@ public class SubjectController {
     @Autowired
     public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Subject>>
+        createSubjectsBulk(@RequestBody @Valid List<Subject> subjects) {
+        List<Subject> createdSubjects = subjects.stream()
+                .filter(subject -> !subjectService.existsByName(subject.getName()))
+                .map(subjectService::addSubject)
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubjects);
     }
 
     @PostMapping

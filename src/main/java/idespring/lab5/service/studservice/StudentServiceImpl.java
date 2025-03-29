@@ -7,13 +7,12 @@ import idespring.lab5.model.Student;
 import idespring.lab5.model.Subject;
 import idespring.lab5.repository.studentrepo.StudentRepository;
 import jakarta.transaction.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentServ {
@@ -164,25 +163,32 @@ public class StudentServiceImpl implements StudentServ {
         logger.info("Cleared cache for group id: {}", groupId);
     }
 
+    //    public void clearCachesByAge(int age) {
+    //        List<String> keysToRemove = new ArrayList<>();
+    //
+    //        for (int i = 0; i < cache.size(); i++) {
+    //            String key = age + "-null-null";
+    //            keysToRemove.add(key);
+    //
+    //            key = age + "-asc-null";
+    //            keysToRemove.add(key);
+    //
+    //            key = age + "-desc-null";
+    //            keysToRemove.add(key);
+    //        }
+    //
+    //        for (String key : keysToRemove) {
+    //            cache.remove(key);
+    //        }
+    //
+    //        logger.info("Cleared caches for age: {}", age);
+    //    }
 
     public void clearCachesByAge(int age) {
-        List<String> keysToRemove = new ArrayList<>();
-
-        for (int i = 0; i < cache.size(); i++) {
-            String key = age + "-null-null";
-            keysToRemove.add(key);
-
-            key = age + "-asc-null";
-            keysToRemove.add(key);
-
-            key = age + "-desc-null";
-            keysToRemove.add(key);
-        }
-
-        for (String key : keysToRemove) {
-            cache.remove(key);
-        }
-
+        // Удаляем все возможные комбинации ключей с указанным возрастом
+        cache.remove(age + "-null-null");
+        cache.remove(age + "-asc-null");
+        cache.remove(age + "-desc-null");
         logger.info("Cleared caches for age: {}", age);
     }
 
@@ -200,7 +206,7 @@ public class StudentServiceImpl implements StudentServ {
         logger.info("Cleared list caches");
     }
 
-    private void clearRelatedCaches(Student student) {
+    public void clearRelatedCaches(Student student) {
         if (student == null) {
             return;
         }

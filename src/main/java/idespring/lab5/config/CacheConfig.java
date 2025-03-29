@@ -1,8 +1,5 @@
 package idespring.lab5.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CacheConfig<K, V> {
@@ -27,6 +26,16 @@ public class CacheConfig<K, V> {
                        @Value("${cache.maxSize}") int maxSize) {
         this.maxAgeInMillis = maxAgeInMillis;
         this.maxSize = maxSize;
+
+        executor.scheduleAtFixedRate(this::cleanExpiredEntries,
+                maxAgeInMillis / 2,
+                maxAgeInMillis / 2,
+                TimeUnit.MILLISECONDS);
+    }
+
+    public CacheConfig() {
+        this.maxAgeInMillis = 600000000;
+        this.maxSize = 100;
 
         executor.scheduleAtFixedRate(this::cleanExpiredEntries,
                 maxAgeInMillis / 2,

@@ -1,7 +1,6 @@
 package idespring.lab5.service.studservice;
 
 import idespring.lab5.model.Student;
-
 import java.util.List;
 
 public interface StudentServ {

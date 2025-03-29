@@ -1,7 +1,6 @@
 package idespring.lab5.service.markservice;
 
 import idespring.lab5.model.Mark;
-
 import java.util.List;
 
 public interface MarkService {

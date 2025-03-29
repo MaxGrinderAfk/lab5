@@ -7,13 +7,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/groups")
@@ -24,6 +24,32 @@ public class GroupController {
     @Autowired
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Group>>
+        createGroupsBulk(@RequestBody List<Map<String, Object>> requests) {
+        List<Group> createdGroups = requests.stream()
+                .map(request -> {
+                    if (!request.containsKey("name") || !(request.get("name") instanceof String)
+                            || ((String) request.get("name")).isBlank()) {
+                        throw new ValidationException(
+                                "Поле 'name' обязательно и не может быть пустым");
+                    }
+
+                    if (!request.containsKey(STUDIDERR)
+                            || !(request.get(STUDIDERR) instanceof List)) {
+                        throw new ValidationException(
+                                "Поле 'studentIds' обязательно и должно быть списком чисел");
+                    }
+
+                    String name = (String) request.get("name");
+                    List<Integer> studentIds = (List<Integer>) request.get(STUDIDERR);
+                    return groupService.addGroup(name, studentIds);
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdGroups);
     }
 
     @PostMapping

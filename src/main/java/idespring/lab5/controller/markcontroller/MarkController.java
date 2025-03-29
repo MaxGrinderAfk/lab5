@@ -5,13 +5,14 @@ import idespring.lab5.service.markservice.MarkService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Validated
 @RestController
@@ -21,6 +22,15 @@ public class MarkController {
 
     public MarkController(MarkService markService) {
         this.markService = markService;
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<Mark>> createMarksBulk(@RequestBody List<Mark> marks) {
+        List<Mark> createdMarks = marks.stream()
+                .map(markService::addMark)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdMarks);
     }
 
     @PostMapping
