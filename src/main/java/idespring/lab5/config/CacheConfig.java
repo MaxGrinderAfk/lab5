@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,7 @@ public class CacheConfig<K, V> {
 
     private final Object lock = new Object();
 
+    @Autowired
     public CacheConfig(@Value("${cache.maxAge}") long maxAgeInMillis,
                        @Value("${cache.maxSize}") int maxSize) {
         this.maxAgeInMillis = maxAgeInMillis;
